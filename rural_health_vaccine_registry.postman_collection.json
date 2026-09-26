@@ -1,0 +1,613 @@
+{
+  "info": {
+    "_postman_id": "f82b7194-e3c1-4d92-bb8a-2a4c9b910321",
+    "name": "Rural Health Clinic Vaccine & Registry Database API",
+    "description": "Complete REST API collection for interacting with MySQL database tables: Patients, Vaccines, Cold-Chain Refrigeration Equipment, Temperature Logs, Immunization Events, Clinical Alerts, and Analytics.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "admin",
+        "type": "string"
+      },
+      {
+        "key": "password",
+        "value": "admin123",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Patients Database",
+      "item": [
+        {
+          "name": "Get All Patients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients"]
+            },
+            "description": "Retrieve all registered patient records from the database."
+          }
+        },
+        {
+          "name": "Search Patients by Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/patients?search=Aarav",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Aarav"
+                }
+              ]
+            },
+            "description": "Search patients by name or phone keyword."
+          }
+        },
+        {
+          "name": "Filter Patients by Village",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/patients?village=Rampur",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients"],
+              "query": [
+                {
+                  "key": "village",
+                  "value": "Rampur"
+                }
+              ]
+            },
+            "description": "Filter patients by rural village location."
+          }
+        },
+        {
+          "name": "Get Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/patients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients", "1"]
+            },
+            "description": "Fetch a single patient record by primary key ID."
+          }
+        },
+        {
+          "name": "Create New Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientName\": \"Rohan Mehta\",\n  \"dateOfBirth\": \"2026-02-15\",\n  \"gender\": \"Male\",\n  \"phone\": \"+91 98765 11223\",\n  \"address\": \"Gali No. 4, Post Office Road\",\n  \"village\": \"Rampur\",\n  \"guardianName\": \"Kavita Mehta (Mother)\",\n  \"guardianPhone\": \"+91 98765 11223\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients"]
+            },
+            "description": "Insert a new infant or child patient into the database."
+          }
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientName\": \"Aarav Kumar\",\n  \"dateOfBirth\": \"2026-07-20\",\n  \"gender\": \"Male\",\n  \"phone\": \"+91 98450 12345\",\n  \"address\": \"House 42, North Lane, Updated\",\n  \"village\": \"Rampur\",\n  \"guardianName\": \"Sunita Kumar (Mother)\",\n  \"guardianPhone\": \"+91 98450 12345\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/patients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients", "1"]
+            },
+            "description": "Update existing patient contact or demographic details."
+          }
+        },
+        {
+          "name": "Delete Patient",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/patients/10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "patients", "10"]
+            },
+            "description": "Remove patient record from the database."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Vaccines & Stock Database",
+      "item": [
+        {
+          "name": "Get All Vaccines",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vaccines",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vaccines"]
+            },
+            "description": "Fetch all vaccines stored in the clinic inventory."
+          }
+        },
+        {
+          "name": "Get Low Stock Vaccines",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vaccines?filter=low_stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vaccines"],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "low_stock"
+                }
+              ]
+            },
+            "description": "List vaccines whose quantity is below the minimum required threshold."
+          }
+        },
+        {
+          "name": "Get Expired Vaccines",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vaccines?filter=expired",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vaccines"],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "expired"
+                }
+              ]
+            },
+            "description": "List vaccines whose expiration date is in the past."
+          }
+        },
+        {
+          "name": "Get Expiring Soon Vaccines",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vaccines?filter=expiring_soon",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vaccines"],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "expiring_soon"
+                }
+              ]
+            },
+            "description": "List vaccines expiring in the next 90 days."
+          }
+        },
+        {
+          "name": "Get Vaccine by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vaccines/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vaccines", "1"]
+            },
+            "description": "Retrieve vaccine details by vaccine ID."
+          }
+        },
+        {
+          "name": "Create New Vaccine Batch",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vaccineName\": \"Hepatitis B Pediatric\",\n  \"manufacturer\": \"Serum Institute of India\",\n  \"batchNumber\": \"HEP-2026-N12\",\n  \"expiryDate\": \"2027-11-30\",\n  \"quantity\": 50,\n  \"minimumStock\": 15,\n  \"storageTemperature\": \"2°C to 8°C\",\n  \"supplier\": \"National Vaccine Depot\",\n  \"receivedDate\": \"2026-09-01\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/vaccines",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vaccines"]
+            },
+            "description": "Record a newly delivered vaccine batch into inventory."
+          }
+        },
+        {
+          "name": "Update Vaccine",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vaccineName\": \"BCG (Bacillus Calmette-Guerin)\",\n  \"manufacturer\": \"Serum Institute of India\",\n  \"batchNumber\": \"BCG-2026-A44\",\n  \"expiryDate\": \"2027-04-30\",\n  \"quantity\": 90,\n  \"minimumStock\": 20,\n  \"storageTemperature\": \"2°C to 8°C\",\n  \"supplier\": \"National Vaccine Depot\",\n  \"receivedDate\": \"2026-05-10\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/vaccines/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vaccines", "1"]
+            },
+            "description": "Modify stock levels or metadata for an existing vaccine batch."
+          }
+        },
+        {
+          "name": "Delete Vaccine",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vaccines/6",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vaccines", "6"]
+            },
+            "description": "Remove vaccine record from inventory."
+          }
+        },
+        {
+          "name": "Get Vaccine Inventory Movement Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vaccines/1/inventory",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vaccines", "1", "inventory"]
+            },
+            "description": "Audit stock intake, consumption, and adjustment ledger entries for this vaccine."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Cold-Chain Equipment Database",
+      "item": [
+        {
+          "name": "Get All Equipment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/equipment",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "equipment"]
+            },
+            "description": "Retrieve all cold-chain storage units (ILRs, Deep Freezers, Cold Boxes)."
+          }
+        },
+        {
+          "name": "Get Equipment by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/equipment/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "equipment", "1"]
+            },
+            "description": "Retrieve cold chain equipment details and temperature bounds."
+          }
+        },
+        {
+          "name": "Add New Equipment Unit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"equipmentName\": \"Outreach Vaccine Carrier VC-09\",\n  \"equipmentType\": \"Cold Box\",\n  \"location\": \"Room 104 - Mobile Team\",\n  \"minimumTemperature\": 2.0,\n  \"maximumTemperature\": 8.0,\n  \"currentTemperature\": 4.0,\n  \"status\": \"ACTIVE\",\n  \"lastMaintenanceDate\": \"2026-08-15\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/equipment",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "equipment"]
+            },
+            "description": "Register a new refrigerator, freezer, or transport cold box."
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Temperature Monitoring Logs",
+      "item": [
+        {
+          "name": "Get Recent Temperature Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/temperature-logs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "temperature-logs"]
+            },
+            "description": "Retrieve recent cold-chain temperature readings with status (NORMAL, WARNING, CRITICAL)."
+          }
+        },
+        {
+          "name": "Get Temperature Logs by Equipment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/temperature-logs?equipmentId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "temperature-logs"],
+              "query": [
+                {
+                  "key": "equipmentId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Filter historical temperature logs recorded for a specific refrigerator or freezer."
+          }
+        },
+        {
+          "name": "Log New Temperature Reading",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"equipmentId\": 1,\n  \"recordedBy\": \"Sunita Sharma\",\n  \"temperature\": 4.6,\n  \"remarks\": \"Standard afternoon temperature log check\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/temperature-logs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "temperature-logs"]
+            },
+            "description": "Record a new cold-chain sensor/manual reading. Auto-evaluates excursion alerts."
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Patient Immunizations Database",
+      "item": [
+        {
+          "name": "Get All Immunizations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/immunizations",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "immunizations"]
+            },
+            "description": "Fetch list of all administered vaccine doses."
+          }
+        },
+        {
+          "name": "Get Immunizations for Patient",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/immunizations?patientId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "immunizations"],
+              "query": [
+                {
+                  "key": "patientId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Fetch vaccination history and vaccine passport records for a specific child."
+          }
+        },
+        {
+          "name": "Record New Vaccination Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": 1,\n  \"vaccineId\": 1,\n  \"doseNumber\": 2,\n  \"vaccinationDate\": \"2026-09-25\",\n  \"nextDueDate\": \"2026-10-25\",\n  \"administeredBy\": \"Dr. Alok Verma\",\n  \"batchNumber\": \"BCG-2026-A44\",\n  \"remarks\": \"Dose administered successfully, infant healthy\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/immunizations",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "immunizations"]
+            },
+            "description": "Record an administered vaccine dose. Automatically decrements inventory and updates schedule."
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Clinical Alerts & Notifications",
+      "item": [
+        {
+          "name": "Get Active Alerts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/alerts?status=ACTIVE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "alerts"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                }
+              ]
+            },
+            "description": "List all active critical, warning, and informational cold chain and registry alerts."
+          }
+        },
+        {
+          "name": "Get All Alerts (History)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/alerts?status=ALL",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "alerts"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "ALL"
+                }
+              ]
+            },
+            "description": "List all alerts including previously resolved issues."
+          }
+        },
+        {
+          "name": "Resolve Alert",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/alerts/1/resolve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "alerts", "1", "resolve"]
+            },
+            "description": "Mark an alert as RESOLVED."
+          }
+        },
+        {
+          "name": "Trigger Alerts Re-synchronization",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/alerts/sync",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "alerts", "sync"]
+            },
+            "description": "Recalculate all stock levels, cold chain spikes, and overdue schedules into alerts."
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Dashboard & Analytics Stats",
+      "item": [
+        {
+          "name": "Get Dashboard Summary Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "stats"]
+            },
+            "description": "High-level clinic KPIs: patient count, total vaccines, available stock, low stock, expired batches, alerts."
+          }
+        },
+        {
+          "name": "Chart: Monthly Vaccinations Trend",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/charts/vaccinations-by-month",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "charts", "vaccinations-by-month"]
+            },
+            "description": "Monthly aggregated vaccination counts for Chart.js / visual reporting."
+          }
+        },
+        {
+          "name": "Chart: Vaccine Stock Levels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/charts/vaccine-stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "charts", "vaccine-stock"]
+            },
+            "description": "Stock levels vs minimum stock safety thresholds for each vaccine."
+          }
+        },
+        {
+          "name": "Chart: Temperature History Curves",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/dashboard/charts/temperatures",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dashboard", "charts", "temperatures"]
+            },
+            "description": "Temperature readings across all storage units over time."
+          }
+        }
+      ]
+    }
+  ]
+}
